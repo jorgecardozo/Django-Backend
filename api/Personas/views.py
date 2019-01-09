@@ -12,7 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist, FieldDoesNotExist
 from .services.services import Exists 
 
 #App Controller
-from .controllers.controllers import Get, Create, Delete 
+from .controllers.controllers import Get, Create, Delete, Edit
  
 @api_view(['GET', 'POST'])
 def _list(request):
@@ -24,7 +24,7 @@ def _list(request):
         #aca genero un nuevo elemento en la db
         serializer = PersonasSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        data = serializer.validated_data
+        data = serializer.validated_data    
         
         obj = Personas(**data)
         obj.save()
@@ -41,11 +41,13 @@ def _detail(request, id):
       
         #obtengo el elemento con id = id
     elif request.method == "PUT":
-        pass
-        # dto_serializer = PersonasSerializer(data=request.data, check_unique=False)
-        # dto_serializer.is_valid(raise_exception=True)
-        # data = dto_serializer.validated_data
+        serializer = PersonasSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
 
+        obj_result = Edit(id, data)
+
+        return Response()
         # obj = 
         #edito el elemento con id = id 
 

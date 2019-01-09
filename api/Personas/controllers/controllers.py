@@ -1,10 +1,15 @@
 from django.core.exceptions import ObjectDoesNotExist, FieldDoesNotExist
+# from paradigma.objects.classes import DataTransferResultSet
+
 from ..services.services import Exists
 from ..serializers import PersonasSerializer
 from ..models import Personas
 from rest_framework.response import Response
 
-def Get(id,):
+from django.db.models import F, Value
+from django.db.models.functions import Concat
+# metodos
+def Get(id):
     if Exists(id):
         obj = Personas.objects.get(id=id)
         serializer = PersonasSerializer(obj)
@@ -18,16 +23,16 @@ def Create(data):
     obj.save()
     return Get(obj.id)
 
-# def Edit(id, data):
-#     if Exists(id):
-#         obj = Personas.objects.get(id=id)
-#         for field, value in data.items():
-#             setattr(obj, field, value)
-#         obj.full_clean()
-#         obj.save()
-#         return Get(obj.id)
-#     else:
-#         raise ObjectDoesNotExist(id)
+def Edit(id, data):
+    if Exists(id):
+        obj = Personas.objects.get(id=id)
+        for field, value in data.items():
+            setattr(obj, field, value)
+        obj.full_clean()
+        obj.save()
+        return Get(obj.id)
+    else:
+        raise ObjectDoesNotExist(id)
 
 def Delete(id):
     if Exists(id):
