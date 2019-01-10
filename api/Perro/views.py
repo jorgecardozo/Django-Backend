@@ -1,8 +1,8 @@
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes, parser_classes
 
-from .models import Personas
-from .serializers import PersonasSerializer
+from .models import Perro
+from .serializers import PerroSerializer
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -15,33 +15,33 @@ from .services.services import Exists
 from .controllers.controllers import Get, Create, Delete, Edit
  
 @api_view(['GET', 'POST'])
-def _list(request):
+def _listP(request):
     if request.method == "GET":
         #aca obtengo la lista
-        data = PersonasSerializer(Personas.objects, many=True).data
+        data = PerroSerializer(Perro.objects, many=True).data
         return Response(data, status=status.HTTP_200_OK)
     elif request.method == "POST":
         #aca genero un nuevo elemento en la db
-        serializer = PersonasSerializer(data=request.data)
+        serializer = PerroSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data    
         
-        obj = Personas(**data)
+        obj = Perro(**data)
         obj.save()
 
-        reply = PersonasSerializer(obj).data
+        reply = PerroSerializer(obj).data
 
         return Response(reply, status=status.HTTP_201_CREATED)
 
 @api_view(['GET', 'PUT', 'DELETE']) 
-def _detail(request, id):
+def _detailP(request, id):
     if request.method == "GET":
         data = Get(id)
         return Response(data,status=status.HTTP_200_OK)
       
         #obtengo el elemento con id = id
     elif request.method == "PUT":
-        serializer = PersonasSerializer(data=request.data)
+        serializer = PerroSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 
